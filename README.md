@@ -1,1 +1,2 @@
-# MP-G5
+# Major Project -G5
+## Instructions
