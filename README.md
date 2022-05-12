@@ -3,4 +3,6 @@
 - Nathan Ford
 - Samson Mackeller
 - Aaron Sandelowsky
+- Alec Cook
+- Leon Ortega
 ## Instructions
