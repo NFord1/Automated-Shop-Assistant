@@ -7,8 +7,17 @@
 // Using code modules from stewarts week 9 major project drivers
 // Scale data
 // align with calibration box
-
-void laserCalibration(unsigned long *sample){
+void CalibrateDepth(void){
+  int check=0;
+  while (check==0){
+    if (laserCalibration(sample)==1){
+      check = 1;
+    }
+      else {
+        check==0;
+      }
+}
+int laserCalibration(unsigned long *sample){
 
   char buffer[128];
   
@@ -22,17 +31,23 @@ void laserCalibration(unsigned long *sample){
   
     SerialOutputString(buffer, &SCI1);
   
+    return 0;
+    
   } else if (sample < dist){
     //move back
     sprintf(buffer, "Move Device Back\r\n");
   
     SerialOutputString(buffer, &SCI1);
   
+    return 0;
+    
   } else if (sample == dist){
     //correct position
     sprintf(buffer, "Calibrated: Correct Position\r\n");
   
     SerialOutputString(buffer, &SCI1);
+    
+    return 1;
   }
   
 }
