@@ -4,5 +4,6 @@
 // calibrate device to the correct distance from grid
 void laserCalibration(unsigned long *sample);
 
+void CalibrateDepth(void);
 
 #endif
