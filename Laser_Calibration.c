@@ -18,7 +18,9 @@ void CalibrateDepth(void){
       }
 }
 int laserCalibration(unsigned long *sample){
-
+  
+  int scale_factor = 
+  int sample = &sample*scale_factor
   char buffer[128];
   
   //Intended distance
