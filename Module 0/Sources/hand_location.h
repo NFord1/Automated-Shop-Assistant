@@ -3,6 +3,19 @@
 
 
 // Generic struct for the boxes 
+
+// For reference:
+//   ___________
+//  |   |   |   |
+//  | 1 | 2 | 3 |
+//  |---|---|---|
+//  |   |   |   |   <--- Hand goes this way
+//  | 4 | 5 | 6 |
+//  |---|---|---|
+//  | 7 | 8 | 9 |
+//  |___|___|___|
+
+
 struct box{
  
  int box_number;

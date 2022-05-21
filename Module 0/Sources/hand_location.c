@@ -24,7 +24,7 @@ int user_selection_box_number(box* box_array){
 //  |   |   |   |
 //  | 1 | 2 | 3 |
 //  |---|---|---|
-//  |   |   |   |
+//  |   |   |   |   <--- Hand goes this way
 //  | 4 | 5 | 6 |
 //  |---|---|---|
 //  | 7 | 8 | 9 |
