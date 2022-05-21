@@ -13,3 +13,6 @@ int main(){
     storeItems[2][0] = {7, "Rice Cracker",  0, 0, 20, 4.25};
     storeItems[2][1] = {8, "Plums",  0, 0, 20, 4.25};
     storeItems[2][2] = {9, "Raspberries",  0, 0, 20, 4.25};
+
+
+  
