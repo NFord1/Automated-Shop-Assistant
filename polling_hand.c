@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "polling_hand.h"
+#include "hand_location.h"
 #include "servo.h"
 #include "laser.h"
 #include <stdlib.h>
