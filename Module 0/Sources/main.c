@@ -16,6 +16,7 @@
 #include "gyro.h"
 
 
+
 void printErrorCode(IIC_ERRORS error_code) {
   char buffer[128];  
   switch (error_code) {
@@ -56,6 +57,8 @@ void printErrorCode(IIC_ERRORS error_code) {
 }
 
 void main(void) {
+  int HandPresent = 0;
+  int numberOfSeconds = 2, SensesPerSecond =6000000;
 
   AccelRaw read_accel;
   AccelScaled scaled_accel;
@@ -194,18 +197,22 @@ void main(void) {
    full_dist = 0;
    
    //Test if empty, full or a hand is present
-   
-   if (singleSample <= hand_dist) {
-      sprintf(buffer, "Hand!\r\n");
-      SerialOutputString(buffer, &SCI1);
-   } else if (singleSample <= full_dist) {
-      sprintf(buffer, "Full!\r\n");
-      SerialOutputString(buffer, &SCI1);
-   } else {
-      sprintf(buffer, "Empty!\r\n");
-      SerialOutputString(buffer, &SCI1);
-   }
-
+     if (singleSample <= hand_dist) {
+        sprintf(buffer, "Hand!\r\n");
+        HandPresent++;
+        SerialOutputString(buffer, &SCI1);
+        if(HandPresent > (numberOfSeconds * SensesPerSecond){
+            SerialOutputString("Hand has been there for a long time",&SCI1);
+        }
+     } else if (singleSample <= full_dist) {
+        sprintf(buffer, "Full!\r\n");
+        SerialOutputString(buffer, &SCI1);
+        HandPresent = 0;
+     } else {
+        sprintf(buffer, "Empty!\r\n");
+        SerialOutputString(buffer, &SCI1);
+        HandPresent = 0;
+     }
     
     // output the data to serial
     
