@@ -57,8 +57,8 @@ void printErrorCode(IIC_ERRORS error_code) {
 }
 
 void main(void) {
-  int HandPresent = 0;
-  int numberOfSeconds = 2, SensesPerSecond =6000000;
+  int HandPresent = 0, HandWasThere = 0;
+  int numberOfSeconds = 2, SensesPerSecond = 500;
 
   AccelRaw read_accel;
   AccelScaled scaled_accel;
@@ -203,6 +203,7 @@ void main(void) {
         SerialOutputString(buffer, &SCI1);
         if(HandPresent > (numberOfSeconds * SensesPerSecond){
             SerialOutputString("Hand has been there for a long time",&SCI1);
+		HandWasThere = 1;
         }
      } else if (singleSample <= full_dist) {
         sprintf(buffer, "Full!\r\n");
