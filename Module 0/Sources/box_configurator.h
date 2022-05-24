@@ -22,7 +22,7 @@ struct box{
  // Mid-point will have to be added after Job 2 is done
  float mid_point_x;
  float mid_point_y;
- floar mid_point_depth;
+ float mid_point_depth;
  int hand_covering; 
  
  

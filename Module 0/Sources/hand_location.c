@@ -2,6 +2,7 @@
 #include "hand_location.h"
 #include "servo.h"
 #include "laser.h"
+#include "box_configurator.h"
 #include <stdlib.h>
 
 #define TOTAL_BOXES 9
