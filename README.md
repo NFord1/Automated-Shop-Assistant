@@ -42,8 +42,29 @@ Function 3: misaligned_midpoint(box_array, home_x, home_y, azimuth789)
 - Results in observing a 'flat' surface, with equal distances left and right, thus an ideal 'centre point' is identified
 - Allows for more robust system
 
+-------------------------------------------------------------------------------------------------------------------------------
+
+## Testing Procedures
+
+Throughout the calibration phase, utilising the serial output is crucial to understand what's working and what isn't.
+- Setting outputs for magnetometer readings
+- Setting outputs for lidar distance readings
+- Setting outputs for midpoints of points and azimuth values
+
+Further, modules can be tested in isolation by setting triggers (eg establish_boxes, check_midpoints, checking_for_arm) to 1, resulting in while() loops not triggering. Simply set the aspects of the code you don't want to run to 1, and leave others at 0.
+
 ### Sensing
 The Sensing module will cycle around all 9 shelves detetcing the depth data present in each direction. If the Depth data is less than the front of the shelf the program will assume that a hand is present and give the user data that can influence a purchase. If the Depth data is between the front and back of the shelf values, the program will assume that the shelves are stocked. If the depth data demonstrates that it is similar to the distance from the back of the shelf from the sensor, the program will announce that the shelves are empty.
+
+Function 1: hand_covered_boxes(struct box* box_array)
+- Identifies which boxes are covered, by either a hand or other object
+- Assigns struct value .hand_covering to 1 if covered, 0 if not
+
+Function 2: highest_box_probability(struct box* box_array)
+- Will use the given covered/uncovered boxes to determine most likely hand position
+- Since a hand can't extend without an arm, all boxes between the user (on the right) to the covered point must be filled
+- Assigns a 'priority', assuming the furthest left and highest up covered points to be more likely hands
+- Outputs the box selected, then able to display information
 
 ## Future Uses
 Currently the world is facing extreme supply chain distruptions due to Covid, fuel, climate change shipping and staffing related shortages leading to empty shelves in supermarkets. For example, covid lead to empty toilet paper shelves and the floods lead to mass food shortages nationawide. If we had our robot moving around supermanrket aisles notifyng staff and online shoppers about stock levels in realtime. This would allow the distribution centres to target shortages quicker and shoppers to choose where to shop based on where theuy can find their products. By creating an automated digital twin for supermarkets and department stores supply levels we can streamline supply chains and allow for quicker reactions by companies to ensure sales.
