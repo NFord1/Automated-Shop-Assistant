@@ -53,6 +53,14 @@ Throughout the calibration phase, utilising the serial output is crucial to unde
 
 Further, modules can be tested in isolation by setting triggers (eg establish_boxes, check_midpoints, checking_for_arm) to 1, resulting in while() loops not triggering. Simply set the aspects of the code you don't want to run to 1, and leave others at 0.
 
+## Discussion Questions
+
+- What happens when a slanted surface is encountered for the more precise checks?
+- What happens if the magnetometer orientates at a point where the sensor can't properly rotate?
+- What if the sensed boxes are at different depths?
+
+------------------------------------------------------------------------------------------------------------------------------
+
 ### Sensing
 The Sensing module will cycle around all 9 shelves detetcing the depth data present in each direction. If the Depth data is less than the front of the shelf the program will assume that a hand is present and give the user data that can influence a purchase. If the Depth data is between the front and back of the shelf values, the program will assume that the shelves are stocked. If the depth data demonstrates that it is similar to the distance from the back of the shelf from the sensor, the program will announce that the shelves are empty.
 
@@ -65,6 +73,26 @@ Function 2: highest_box_probability(struct box* box_array)
 - Since a hand can't extend without an arm, all boxes between the user (on the right) to the covered point must be filled
 - Assigns a 'priority', assuming the furthest left and highest up covered points to be more likely hands
 - Outputs the box selected, then able to display information
+
+------------------------------------------------------------------------------------------------------------------------------
+
+## Testing Procedures
+
+Throughout the testing of the hand and box detection modules, the use of the serial port was crucial in identifying the different values being assigned at different points in time.
+- Setting outputs for when a 'hand' is detected whilst polling the right column
+- Displaying a matrix of 1s and 0s of which boxes were covered, like so:
+
+      0 0 0         1 2 3
+      0 1 1   -->   4 5 6
+      0 0 0         7 8 9
+      
+      - Would result in box 5 being selected
+      - 
+- Displaying the final information was useful in ensuring the correct procedures were occuring
+
+## Discussion Questions
+
+------------------------------------------------------------------------------------------------------------------------------
 
 ## Future Uses
 Currently the world is facing extreme supply chain distruptions due to Covid, fuel, climate change shipping and staffing related shortages leading to empty shelves in supermarkets. For example, covid lead to empty toilet paper shelves and the floods lead to mass food shortages nationawide. If we had our robot moving around supermanrket aisles notifyng staff and online shoppers about stock levels in realtime. This would allow the distribution centres to target shortages quicker and shoppers to choose where to shop based on where theuy can find their products. By creating an automated digital twin for supermarkets and department stores supply levels we can streamline supply chains and allow for quicker reactions by companies to ensure sales.
