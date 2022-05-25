@@ -35,7 +35,8 @@ void set_midpoints_box_array(float home_x, float home_y, struct box* box_array);
 float local_average_depth();
 float azimuth_calc(float anchor_distance, int scale);
 void set_midpoints_box_array(float home_x, float home_y, struct box* box_array);
-void misaligned_midpoint(struct box *box_array, int left_box_num, int right_box_num, float ref_x, float ref_y, float azimuth);
+int misaligned_midpoint(struct box *box_array, int left_box_num, int right_box_num, float ref_x, float ref_y, float azimuth);
 void add_midpoint_to_struct(struct box *box_array, int box_num, float midpoint_x, float midpoint_y, float depth);
+void lag();
 
 #endif

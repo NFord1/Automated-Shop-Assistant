@@ -1,12 +1,21 @@
 #include <stdio.h>
+#include <hidef.h>
+#include <assert.h>
+#include "derivative.h"
+#include "pll.h" 
+#include "l3g4200d.h"
+#include "gyro.h"
 #include "hand_location.h"
 #include "servo.h"
 #include "laser.h"
 #include "box_configurator.h"
 #include <stdlib.h>
 #include <math.h>
+#include "simple_serial.h"
 
 #define TOTAL_BOXES 9
+
+char buffer[128]; 
   
 
 
@@ -22,7 +31,18 @@ void build_box_array(struct box box_array[TOTAL_BOXES]) {
 }
 
 
-
+void lag() {
+  
+  int i;
+  int j = 1;
+  int k;
+  for(i = 0; i<9600; i++) {
+    for(k = 0; k< 100; k++) {
+      
+      j = i + 1;
+    }
+  }
+}
 
 
 
@@ -34,7 +54,6 @@ void build_box_array(struct box box_array[TOTAL_BOXES]) {
 #define MAX_SERVO_MOVE 2600
 #define NUM_DEPTH_TESTS 20
 #define UNIT_TO_MM 27
-#define PERCENT_ERROR 10
 #define WIGGLE_ATTEMPTS 50
 #define WIGGLE_SPATIAL_STEP 5
 
@@ -98,7 +117,7 @@ float local_average_depth(){
   for(i = 0; i < NUM_DEPTH_TESTS; i++) {
   
   // TEST IF THIS WORKS THIS WAY v
-    GetLatestLaserSample(distance);
+    GetLatestLaserSample(&distance[i]);
   }
   
  
@@ -113,7 +132,7 @@ float local_average_depth(){
 }
 
 
-float azimuth_calc(float anchor_distance, int scale) {
+float azimuth_calc(float anchor_distance, int scale) { 
 
   double anchor_dist_mm;
   float theta;
@@ -121,19 +140,23 @@ float azimuth_calc(float anchor_distance, int scale) {
   double double_var;
   double double_theta;
   float one_servo_degree;
+  
+  PWMinitialise();
 
-  anchor_dist_mm = (double) anchor_distance * (1/UNIT_TO_MM);
+  anchor_dist_mm = (double) anchor_distance * 0.04;
   double_var = (double)(scale) * (150/anchor_dist_mm);
   double_theta = atan(double_var);
   theta = (float) double_theta;
-  one_servo_degree = MAX_SERVO_MOVE/180;
-  azimuth = theta * one_servo_degree;
+  azimuth = theta * 828.025 * 1.5;
+  
+  sprintf(buffer, "Azimuth = %f\r\n", azimuth);
+  SerialOutputString(buffer, &SCI1);
   
   return azimuth;
 }
 
 
-void misaligned_midpoint(struct box *box_array, int left_box_num, int right_box_num, float ref_x, float ref_y, float azimuth){
+int misaligned_midpoint(struct box *box_array, int left_box_num, int right_box_num, float ref_x, float ref_y, float azimuth){
   int i,j;
   
   float ref_distance;
@@ -145,8 +168,11 @@ void misaligned_midpoint(struct box *box_array, int left_box_num, int right_box_
   float pos_neg_azimuth[2] = {-1, 1};
   float adj_azimuth;
   
+  PWMinitialise();
+  
   setServoPose(ref_x, ref_y);
-  ref_distance = local_average_depth();
+  lag();
+  ref_distance = box_array[8].mid_point_depth;
   
   // WIGGLE UNTIL BOTH ARE ALLIGNED
   for (i =0; i < 2; i++){
@@ -157,20 +183,24 @@ void misaligned_midpoint(struct box *box_array, int left_box_num, int right_box_
  
     // MOVE AZIMUTH DIST (BOX LEFT/ NEG DIRECTION)
     setServoPose(ref_x - adj_azimuth, ref_y);
+    lag();
     left_test_distance = local_average_depth();
-    left_error = left_test_distance * (PERCENT_ERROR/100); 
+    left_error = left_test_distance * 0.2; 
   
     // MOVE AZIMUTH DIST (BOX RIGHT/ POS DIRECTION)
     setServoPose(ref_x + adj_azimuth, ref_y);
+    lag();
     right_test_distance = local_average_depth();
-    right_error = right_test_distance * (PERCENT_ERROR/100);
-  
+    right_error = right_test_distance * 0.2;
+    sprintf(buffer, "%f - %f < %f\r\n", left_test_distance, left_error, ref_distance);
+    SerialOutputString(buffer, &SCI1);
     if (left_test_distance - left_error < ref_distance && left_test_distance + left_error > ref_distance){
       // IF LEFT SIDE FALLS WITHIN ERROR BOUNDS
       if (right_test_distance - right_error < ref_distance && right_test_distance + right_error > ref_distance){  
         // IF RIGHT SIDE FALLS WITHIN ERROR BOUNDS
         add_midpoint_to_struct(box_array, left_box_num, ref_x - adj_azimuth , ref_y, left_test_distance);
         add_midpoint_to_struct(box_array, right_box_num, ref_x + adj_azimuth , ref_y, right_test_distance);
+        return 0;
                
         }
       }
@@ -183,6 +213,7 @@ void misaligned_midpoint(struct box *box_array, int left_box_num, int right_box_
   //                                                                   //
   //                                                                   //
   //                                                                   //
+  
 
 }                                                                      
 

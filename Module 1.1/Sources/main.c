@@ -222,9 +222,9 @@ void main(void) {
     //Check if facing the correct direction
     //Will have some variance, need to calibrate on the day
                                                    
-    magx = -16000;
-    magy = 24000;
-    magz = 4000;
+    magx = 14000;
+    magy = 16000;
+    magz = -7000;
     
     if (read_magnet.x >= magx - 2000) {
       if (read_magnet.y >= magy - 2000) {
@@ -309,8 +309,8 @@ void main(void) {
       */
       
       while (checking_for_arm == 0) {
-        for(j = 0; j < 3; j++) {
-          setServoPose(counter + 300, 300*j);
+      
+          setServoPose(box_array[9].mid_point_x, box_array[9].mid_point_y);
           depth_sum = 0;
           for (i = 0; i < 200; i++) {
             GetLatestLaserSample(&singleSample);
@@ -321,8 +321,30 @@ void main(void) {
           depth_avg = depth_sum / 200;
           sprintf(buffer, "Depth at height %d: %lu\r\n", j, depth_avg);
           SerialOutputString(buffer, &SCI1);
-        }  
-        
+         
+          setServoPose(box_array[6].mid_point_x, box_array[6].mid_point_y);
+          depth_sum = 0;
+          for (i = 0; i < 200; i++) {
+            GetLatestLaserSample(&singleSample);
+            depth_sum = depth_sum + singleSample;
+            sprintf(buffer, "Depth detected run %d: %lu\r\n", i, singleSample);
+            SerialOutputString(buffer, &SCI1);
+          }
+          depth_avg = depth_sum / 200;
+          sprintf(buffer, "Depth at height %d: %lu\r\n", j, depth_avg);
+          SerialOutputString(buffer, &SCI1);
+          
+          setServoPose(box_array[3].mid_point_x, box_array[3].mid_point_y);
+          depth_sum = 0;
+          for (i = 0; i < 200; i++) {
+            GetLatestLaserSample(&singleSample);
+            depth_sum = depth_sum + singleSample;
+            sprintf(buffer, "Depth detected run %d: %lu\r\n", i, singleSample);
+            SerialOutputString(buffer, &SCI1);
+          }
+          depth_avg = depth_sum / 200;
+          sprintf(buffer, "Depth at height %d: %lu\r\n", j, depth_avg);
+          SerialOutputString(buffer, &SCI1);
     }
    
    // Use a while loop, scan right 3 boxes, take an average of 30 distance values at each, check if an arm is detected
