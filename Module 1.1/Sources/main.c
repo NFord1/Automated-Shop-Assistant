@@ -20,6 +20,7 @@
 
 #define TOTAL_BOXES 9
 
+void poll_hand_function(struct box* box_array);
 
 void printErrorCode(IIC_ERRORS error_code) {
   char buffer[128];  
@@ -94,6 +95,7 @@ void main(void) {
   int y_pos;
   
   int establish_boxes = 0;
+  int check_midpoints = 0;
   
   int checking_for_arm = 0;
   unsigned long depth_sum = 0;
@@ -223,8 +225,8 @@ void main(void) {
     //Will have some variance, need to calibrate on the day
                                                    
     magx = 14000;
-    magy = 16000;
-    magz = -7000;
+    magy = 26000;
+    magz = -2000;
     
     if (read_magnet.x >= magx - 2000) {
       if (read_magnet.y >= magy - 2000) {
@@ -274,20 +276,18 @@ void main(void) {
    
    x_pos = counter;
    
-   set_midpoints_box_array(counter, 0, box_array);
+   sprintf(buffer, "counter = %d\r\n", counter);
+  SerialOutputString(buffer, &SCI1);
    
+   
+    while (establish_boxes == 0) {
       
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+      set_midpoints_box_array(x_pos, 0, box_array);
+      establish_boxes = 1;
+    }
+    
+    poll_hand_function(box_array);
+   
       /*while (establish_boxes == 0){
         sprintf(buffer, "In whil loop\r\n");
         SerialOutputString(buffer, &SCI1);
@@ -307,6 +307,11 @@ void main(void) {
         establish_boxes = 1;
       }
       */
+      
+      
+      
+   
+   
   }
   
 }
@@ -315,17 +320,17 @@ void poll_hand_function(struct box* box_array){
   
   char buffer[128];
   unsigned long singleSample;
-  int depth_sum = 0;
-  int depth_avg;
+  float depth_sum = 0;
+  float depth_avg;
   int i, j;
-  int checking_for_arm;
+  int checking_for_arm = 0;
   
 
 
       while (checking_for_arm == 0) {
           
-          lag();
           setServoPose(box_array[9].mid_point_x, box_array[9].mid_point_y);
+          lag();
           depth_sum = 0;
           
           for (i = 0; i < 200; i++) {
@@ -338,13 +343,21 @@ void poll_hand_function(struct box* box_array){
           
           depth_avg = depth_sum / 200;
                     
-          if(depth_avg < box_array[9].mid_point_depth - 600){
-          user_selection_box_number(box_array);  
+          if(depth_avg < box_array[9].mid_point_depth - 2000){
+          
+            sprintf(buffer, "Depth_Avg = %f\r\n", depth_avg);
+            SerialOutputString(buffer, &SCI1);
+            sprintf(buffer, "Mid-Depth =  %f\r\n", box_array[9].mid_point_depth);
+            SerialOutputString(buffer, &SCI1);
+            
+            user_selection_box_number(box_array);
+              
           }
-          lag();
+          
           
           
           setServoPose(box_array[6].mid_point_x, box_array[6].mid_point_y);
+          lag();
           depth_sum = 0;
           
           for (i = 0; i < 200; i++) {
@@ -354,31 +367,31 @@ void poll_hand_function(struct box* box_array){
 
           depth_avg = depth_sum / 200;
 
-          if(depth_avg < box_array[6].mid_point_depth - 600){
-          user_selection_box_number(box_array);           
+          if(depth_avg < box_array[6].mid_point_depth - 2000){
+            user_selection_box_number(box_array);           
+            
           }
-          lag();
+         
           
           setServoPose(box_array[3].mid_point_x, box_array[3].mid_point_y);
+           lag();
           depth_sum = 0;
           
           for (i = 0; i < 200; i++) {
             GetLatestLaserSample(&singleSample);
-            depth_sum = depth_sum + singleSample;
-            
-            
+            depth_sum = depth_sum + singleSample;   
 
           }
           
           depth_avg = depth_sum / 200;
           
           
-          if(depth_avg < box_array[3].mid_point_depth - 600){
-          user_selection_box_number(box_array);
+          if(depth_avg < box_array[3].mid_point_depth - 2000){
+            user_selection_box_number(box_array);
 
 
-  } 
-}
+          } 
+    }
 }
    
    // Use a while loop, scan right 3 boxes, take an average of 30 distance values at each, check if an arm is detected

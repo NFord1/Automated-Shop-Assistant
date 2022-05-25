@@ -48,16 +48,16 @@ void lag() {
 
 //CONFIGURATION INTERUPT BUTTON PH0
 
-#define HOME_X
-#define HOME_Y
-#define HOME_ELEVATION
+//#define HOME_X
+//#define HOME_Y
+//#define HOME_ELEVATION
 #define MAX_SERVO_MOVE 2600
 #define NUM_DEPTH_TESTS 20
 #define UNIT_TO_MM 27
 #define WIGGLE_ATTEMPTS 50
 #define WIGGLE_SPATIAL_STEP 5
 
-void set_midpoints_box_array(int home_x, int home_y, struct box* box_array) {
+void set_midpoints_box_array(float home_x, float home_y, struct box* box_array) {
   
 
   
@@ -67,7 +67,8 @@ void set_midpoints_box_array(int home_x, int home_y, struct box* box_array) {
   float elevation;
   float depth_distance;
   
-  
+  sprintf(buffer, "home_x = %f\r\n", home_x);
+  SerialOutputString(buffer, &SCI1);
   
   // TEST DEPTH DIST ANCHOR (BOX 8)
   setServoPose(home_x, home_y);
@@ -84,7 +85,7 @@ void set_midpoints_box_array(int home_x, int home_y, struct box* box_array) {
   // TEST DEPTH DISTANCE (BOX 5)
   setServoPose(home_x, home_y + elevation);
   depth_distance = local_average_depth();
-  add_midpoint_to_struct(box_array, 5, home_x, home_y, depth_distance);
+  add_midpoint_to_struct(box_array, 5, home_x, home_y + elevation, depth_distance);
   // CALC AZIMUTH DISTANCE (BOX 4 AND 6)
   azimuth_456 = azimuth_calc(depth_distance, 1);
   // SET MIDPOINT (BOX 4 AND 6)
@@ -97,7 +98,7 @@ void set_midpoints_box_array(int home_x, int home_y, struct box* box_array) {
   // TEST DEPTH DISTANCE (BOX 2)
   setServoPose(home_x, home_y + elevation);
   depth_distance = local_average_depth();
-  add_midpoint_to_struct(box_array, 2, home_x, home_y, depth_distance);
+  add_midpoint_to_struct(box_array, 2, home_x, home_y + elevation, depth_distance);
   // CALC AZIMUTH DISTANCE (BOX 1 AND 3)
   azimuth_123 = azimuth_calc(depth_distance, 1);
   // SET MIDPOINT (BOX 1 AND 3)

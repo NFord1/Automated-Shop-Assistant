@@ -63,23 +63,29 @@ int user_selection_box_number(struct box* box_array){
 void hand_convered_boxes(struct box* box_array){
 // This function identifies which of the boxes have been
 // convered by the users hand   
-  
+  char buffer[128]; 
   int i;
   float distance;
-  float hand_trigger = 600;
+  float hand_trigger = 2000;
   
-  for(i = 0; i < TOTAL_BOXES; i++){
+  for(i = 1; i < TOTAL_BOXES + 1; i++){
    
    // Based on pre-defined mid-point (x,y) move servo to sample the 
    // distance away of the object
    setServoPose(box_array[i].mid_point_x, box_array[i].mid_point_y);
-   local_average_depth();
+   sprintf(buffer, "Box = %d\r\n", i);
+   SerialOutputString(buffer, &SCI1);
+   sprintf(buffer, "X-mid = %f, Y-mid = %f\r\n", box_array[i].mid_point_x, box_array[i].mid_point_y);
+   SerialOutputString(buffer, &SCI1);
+   lag();
+   distance = local_average_depth();
    
    // If the closest distance is closer than the pre-definied target
    // hand is presentt
    
    if (distance < box_array[i].mid_point_depth - hand_trigger){
-    
+    sprintf(buffer, "Box %d: distance = %f < Mid-Depth = %f - %f\r\n", i, distance, box_array[i].mid_point_depth, hand_trigger);
+    SerialOutputString(buffer, &SCI1);
     box_array[i].hand_covering = 1;
    } 
    else{
@@ -112,42 +118,50 @@ int highest_box_probability(struct box* box_array){
   
   int highest_priority[3];
   int max;
-  char buffer[128]; 
+  char buffer[128];
+  
+  float point_avg = 0;
+  float point_sum = 0;
+  int box_selected;
+   
+  highest_priority[0] = 4;
+  highest_priority[1] = 4;
+  highest_priority[2] = 4;
   
   if (box_array[3].hand_covering == 1) {
-   highest_priority[0] = 1;
+   highest_priority[0] = 3;
   
    if (box_array[2].hand_covering == 1){
     highest_priority[0] = 2;
    
-    if (box_array[2].hand_covering == 1){
-     highest_priority[0] = 3;
+    if (box_array[1].hand_covering == 1){
+     highest_priority[0] = 1;
     
     } 
    }    
   }
 
   if (box_array[6].hand_covering == 1) {
-   highest_priority[1] = 1;
+   highest_priority[1] = 3;
   
    if (box_array[5].hand_covering == 1){
     highest_priority[1] = 2;
    
     if (box_array[4].hand_covering == 1){
-     highest_priority[1] = 3;
+     highest_priority[1] = 1;
     
     } 
    }    
   }
   
   if (box_array[9].hand_covering == 1) {
-   highest_priority[2] = 1;
+   highest_priority[2] = 3;
   
    if (box_array[8].hand_covering == 1){
     highest_priority[2] = 2;
    
     if (box_array[7].hand_covering == 1){
-     highest_priority[2] = 3;
+     highest_priority[2] = 1;
     
     } 
    }    
@@ -158,15 +172,58 @@ max = highest_priority[k];
 
 for (i = 0; i < 3; i++)
 {
-    if (highest_priority[i] > max)
+    if (highest_priority[i] < max)
     {
-        max = (int)highest_priority[i];
+        max = highest_priority[i];
         k = i;
+        
+        sprintf(buffer, "%d\r\n", max	);
+        SerialOutputString(buffer, &SCI1);
+    }
+    if (highest_priority[i] == 4) {
+      highest_priority[i] = 0; 
     }
 }
 
-  sprintf(buffer, "Box w/ hand = %d: %lu\r\n", k);
+if (max != 4) {
+
+  box_selected = k*3 + max;
+
+   sprintf(buffer, "%d %d %d\r\n", box_array[1].hand_covering, box_array[2].hand_covering, box_array[3].hand_covering	);
   SerialOutputString(buffer, &SCI1);
+  
+  sprintf(buffer, "%d %d %d\r\n", box_array[4].hand_covering, box_array[5].hand_covering, box_array[6].hand_covering);
+  SerialOutputString(buffer, &SCI1);
+  
+  sprintf(buffer, "%d %d %d\r\n", box_array[7].hand_covering, box_array[8].hand_covering, box_array[9].hand_covering);
+  SerialOutputString(buffer, &SCI1);
+
+  sprintf(buffer, "Box w/ hand = %d, k = %d, max = %d\r\n", box_selected, k, max);
+  SerialOutputString(buffer, &SCI1);
+  
+  while (point_avg < box_array[box_selected].mid_point_depth - 2000) {
+    setServoPose(box_array[box_selected].mid_point_x, box_array[box_selected].mid_point_y);
+    for (i = 0; i < 50; i++) {
+      
+      point_sum = point_sum + local_average_depth();
+    }
+    point_avg = point_sum / 50;
+    point_sum = 0;
+    sprintf(buffer, "Avg = %f, Depth = %d\r\n", point_avg, box_array[box_selected].mid_point_depth);
+    SerialOutputString(buffer, &SCI1);
+  }
+  
+} else {
+ 
+ sprintf(buffer, "Hand moved too quickly!\r\n");
+ SerialOutputString(buffer, &SCI1);
+  
+}
+ 
+
+
+
+
 
 
 return k;
