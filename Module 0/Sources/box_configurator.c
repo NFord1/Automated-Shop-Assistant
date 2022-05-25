@@ -37,7 +37,7 @@ void build_box_array() {
 #define UNIT_TO_MM 27
 #define PERCENT_ERROR 10
 #define WIGGLE_ATTEMPTS 50
-#define SPATIAL_STEP 5
+#define WIGGLE_SPATIAL_STEP 5
 
 void set_home_pos() {
 
@@ -58,7 +58,6 @@ void box_anchor(float home_x, float home_y) {
   
   int 789_azimuth;
   float home_distance;
-  float test_distance;
   float error;
   
   box_array[8].mid_point_x = home_x;
@@ -74,11 +73,8 @@ void box_anchor(float home_x, float home_y) {
   test_distance = local_average_depth();
   // COMPARE DEPTH DIST (BOX 8 & 9)
   compare_depth(home_distance, test_distance);
-  // MOVE AZIMUTH DIST (BOX 7)
-  setServoPose(home_x - 789_azimuth, home_y);
-  test_distance = local_average_depth();
   // TEST DEPTH DIST BOX 7  
-  789_azimuth = compare_depth(home_x, home_y, home_distance, test_distance, 789_azimuth);
+  789_azimuth = compare_depth(home_x, home_y, home_distance, 789_azimuth);
   // IF MISSED LD0 ON
   
       //WAIT FOR PH0 TO TEST AGAIN
@@ -121,8 +117,7 @@ int box_789_azimuth_calc(int anchor_distance) {
 }
 
 
-void compare_depth(float ref_x, float ref_y, float original, float test, float azimuth){
-  error = test_disance * PERCENT_ERROR/100;
+void compare_depth(float ref_x, float ref_y, float original, float azimuth){
   int i;
   
   if(test_distance + error >= home_distance && test_distance -error <= home_distance){
@@ -138,10 +133,25 @@ void compare_depth(float ref_x, float ref_y, float original, float test, float a
 }
 
 float misaligned_midpoint(float ref_x, float ref_y, float azimuth){
+  float left_test_distance;
+  float right_test_distance;
+  float left_error; 
+  float right_error;
   float wiggle[WIGGLE_ATTEMPTS];
   for(i = 0; i <WIGGLE_ATTEMPTS; i++){
+  // MOVE AZIMUTH DIST (BOX 7)
+  setServoPose(refx - azimuth, home_y);
+  left_test_distance = local_average_depth();
+  left_error = test_disance * (PERCENT_ERROR/100 + 1); 
+  
+  setServoPose(refx - azimuth, home_y);
+  right_test_distance = local_average_depth();
+  right_error = test_disance * (PERCENT_ERROR/100 + 1);
+  
   
   // WIGGLE UNTIL BOTH ARE ALLIGNED
+    
+  }
   
 }
   
