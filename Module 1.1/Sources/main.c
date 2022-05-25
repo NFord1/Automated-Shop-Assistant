@@ -15,6 +15,11 @@
 
 #include "gyro.h"
 
+#include "box_configurator.h"
+#include "hand_location.h"
+
+#define TOTAL_BOXES 9
+
 
 void printErrorCode(IIC_ERRORS error_code) {
   char buffer[128];  
@@ -93,6 +98,9 @@ void main(void) {
   int checking_for_arm = 0;
   unsigned long depth_sum = 0;
   unsigned long depth_avg;
+  
+  struct box box_array[TOTAL_BOXES];
+  build_box_array(box_array);
   
   //assert(error_code != NO_ERROR);
 
@@ -266,39 +274,55 @@ void main(void) {
    
    x_pos = counter;
    
-    while (establish_boxes == 0){
-      sprintf(buffer, "In whil loop\r\n");
-      SerialOutputString(buffer, &SCI1);
-      for (i = 0; i < 3; i++) {
-        y_pos = i * 300;   
-        for (j = -1; j < 2; j++) {
-          sprintf(buffer, "j is %d\r\n", j);
-          SerialOutputString(buffer, &SCI1);
-          x_pos = counter + (j * 300);
-          setServoPose(x_pos, y_pos);
-          for (k = 0; k < 100; k++) {
-            sprintf(buffer, "Reading %d\r\n", k);
+   set_midpoints_box_array(counter, 0, box_array);
+   
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      /*while (establish_boxes == 0){
+        sprintf(buffer, "In whil loop\r\n");
+        SerialOutputString(buffer, &SCI1);
+        for (i = 0; i < 3; i++) {
+          y_pos = i * 300;   
+          for (j = -1; j < 2; j++) {
+            sprintf(buffer, "j is %d\r\n", j);
             SerialOutputString(buffer, &SCI1);
+            x_pos = counter + (j * 300);
+            setServoPose(x_pos, y_pos);
+            for (k = 0; k < 100; k++) {
+              sprintf(buffer, "Reading %d\r\n", k);
+              SerialOutputString(buffer, &SCI1);
+            }
           }
         }
+        establish_boxes = 1;
       }
-      establish_boxes = 1;
-    }
-    
-    while (checking_for_arm == 0) {
-      for(j = 0; j < 3; j++) {
-        setServoPose(counter + 300, 300*j);
-        depth_sum = 0;
-        for (i = 0; i < 200; i++) {
-          GetLatestLaserSample(&singleSample);
-          depth_sum = depth_sum + singleSample;
-          sprintf(buffer, "Depth detected run %d: %lu\r\n", i, singleSample);
+      */
+      
+      while (checking_for_arm == 0) {
+        for(j = 0; j < 3; j++) {
+          setServoPose(counter + 300, 300*j);
+          depth_sum = 0;
+          for (i = 0; i < 200; i++) {
+            GetLatestLaserSample(&singleSample);
+            depth_sum = depth_sum + singleSample;
+            sprintf(buffer, "Depth detected run %d: %lu\r\n", i, singleSample);
+            SerialOutputString(buffer, &SCI1);
+          }
+          depth_avg = depth_sum / 200;
+          sprintf(buffer, "Depth at height %d: %lu\r\n", j, depth_avg);
           SerialOutputString(buffer, &SCI1);
-        }
-        depth_avg = depth_sum / 200;
-        sprintf(buffer, "Depth at height %d: %lu\r\n", j, depth_avg);
-        SerialOutputString(buffer, &SCI1);
-      }
+        }  
+        
     }
    
    // Use a while loop, scan right 3 boxes, take an average of 30 distance values at each, check if an arm is detected
