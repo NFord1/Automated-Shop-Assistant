@@ -66,7 +66,7 @@ void hand_convered_boxes(struct box* box_array){
    // If the closest distance is closer than the pre-definied target
    // hand is presentt
    
-   if (distance < hand_trigger){
+   if (distance[i] < hand_trigger){
     
     box_array[i].hand_covering = 1;
    } 

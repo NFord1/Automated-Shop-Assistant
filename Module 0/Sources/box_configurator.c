@@ -31,7 +31,7 @@ void build_box_array(struct box box_array[TOTAL_BOXES]) {
 #define HOME_X
 #define HOME_Y
 #define HOME_ELEVATION
-#define MAX_SERVO_MOVE
+#define MAX_SERVO_MOVE 2600
 #define NUM_DEPTH_TESTS 20
 #define UNIT_TO_MM 27
 #define PERCENT_ERROR 10
@@ -68,11 +68,11 @@ void set_midpoints_box_array(float home_x, float home_y, struct box* box_array) 
   // TEST DEPTH DIST ANCHOR (BOX 8)
   setServoPose(home_x, home_y);
   depth_distance = local_average_depth();
-  add_midpoint_to_struct(8, home_x, home_y, depth_distance); 
+  add_midpoint_to_struct(box_array, 8, home_x, home_y, depth_distance); 
   // CALC AZIMUTH DISTANCE (BOX 7 AND 9)
   azimuth_789 = azimuth_calc(depth_distance, 1);
   // SET MIDPOINT (BOX 7 and 9)
-  misaligned_midpoint(7,9,home_x, home_y, azimuth_789);
+  misaligned_midpoint(box_array, 7,9,home_x, home_y, azimuth_789);
   
   
   // CALC ELEVATION (TO MOVE BOX 5)
@@ -80,11 +80,11 @@ void set_midpoints_box_array(float home_x, float home_y, struct box* box_array) 
   // TEST DEPTH DISTANCE (BOX 5)
   setServoPose(home_x, home_y + elevation);
   depth_distance = local_average_depth();
-  add_midpoint_to_struct(5, home_x, home_y, depth_distance);
+  add_midpoint_to_struct(box_array, 5, home_x, home_y, depth_distance);
   // CALC AZIMUTH DISTANCE (BOX 4 AND 6)
   azimuth_456 = azimuth_calc(depth_distance, 1);
   // SET MIDPOINT (BOX 4 AND 6)
-  misaligned_midpoint(4,6,home_x, home_y + elevation, azimuth_456);
+  misaligned_midpoint(box_array, 4,6,home_x, home_y + elevation, azimuth_456);
   
   
   
@@ -93,11 +93,11 @@ void set_midpoints_box_array(float home_x, float home_y, struct box* box_array) 
   // TEST DEPTH DISTANCE (BOX 2)
   setServoPose(home_x, home_y + elevation);
   depth_distance = local_average_depth();
-  add_midpoint_to_struct(2, home_x, home_y, depth_distance);
+  add_midpoint_to_struct(box_array, 2, home_x, home_y, depth_distance);
   // CALC AZIMUTH DISTANCE (BOX 1 AND 3)
   azimuth_123 = azimuth_calc(depth_distance, 1);
   // SET MIDPOINT (BOX 1 AND 3)
-  misaligned_midpoint(1,3,home_x, home_y + elevation, azimuth_123);
+  misaligned_midpoint(box_array, 1,3,home_x, home_y + elevation, azimuth_123);
 
 }
 
@@ -130,31 +130,35 @@ float local_average_depth(){
 
 float azimuth_calc(float anchor_distance, int scale) {
 
-  float anchor_dist_mm;
+  double anchor_dist_mm;
   float theta;
   float azimuth;
+  double double_var;
+  double double_theta;
+  float one_servo_degree;
 
-  anchor_dist_mm = UNIT_TO_MM * (1/anchor_distance);
-  theta = (float) atan((double)(scale *150)/(double)anchor_dist_mm);
-  azimuth = (float) theta *(MAX_SERVO_MOVE/180);
+  anchor_dist_mm = (double) UNIT_TO_MM * (1/anchor_distance);
+  double_var = (double)(scale) * (150/anchor_dist_mm);
+  double_theta = atan(double_var);
+  theta = (float) double_theta;
+  one_servo_degree = MAX_SERVO_MOVE/180;
+  azimuth = theta * one_servo_degree;
   
   return azimuth;
 }
 
 
-void misaligned_midpoint(int left_box_num, int right_box_num, float ref_x, float ref_y, float azimuth){
+void misaligned_midpoint(struct box *box_array, int left_box_num, int right_box_num, float ref_x, float ref_y, float azimuth){
   int i,j;
   
-  float ref_distance
+  float ref_distance;
   float left_test_distance;
   float right_test_distance;
-  float ref_error;
   float left_error; 
   float right_error;
   
   float pos_neg_azimuth[2] = {-1, 1};
   float adj_azimuth;
-  float wiggle[WIGGLE_ATTEMPTS];
   
   setServoPose(ref_x, ref_y);
   ref_distance = local_average_depth();
@@ -169,21 +173,20 @@ void misaligned_midpoint(int left_box_num, int right_box_num, float ref_x, float
     // MOVE AZIMUTH DIST (BOX LEFT/ NEG DIRECTION)
     setServoPose(ref_x - adj_azimuth, ref_y);
     left_test_distance = local_average_depth();
-    left_error = left_test_disance * (PERCENT_ERROR/100); 
+    left_error = left_test_distance * (PERCENT_ERROR/100); 
   
     // MOVE AZIMUTH DIST (BOX RIGHT/ POS DIRECTION)
     setServoPose(ref_x + adj_azimuth, ref_y);
     right_test_distance = local_average_depth();
-    right_error = right_test_disance * (PERCENT_ERROR/100);
+    right_error = right_test_distance * (PERCENT_ERROR/100);
   
     if (left_test_distance - left_error < ref_distance && left_test_distance + left_error > ref_distance){
       // IF LEFT SIDE FALLS WITHIN ERROR BOUNDS
       if (right_test_distance - right_error < ref_distance && right_test_distance + right_error > ref_distance){  
         // IF RIGHT SIDE FALLS WITHIN ERROR BOUNDS
-        add_midpoint_to_struct(left_box_num, ref_x - adj_azimuth , ref_y, left_test_distance);
-        add_midpoint_to_struct(right_box_num, ref_x + adj_azimuth , ref_y, right_test_distance);
-        void adj_azimuth;
-        
+        add_midpoint_to_struct(box_array, left_box_num, ref_x - adj_azimuth , ref_y, left_test_distance);
+        add_midpoint_to_struct(box_array, right_box_num, ref_x + adj_azimuth , ref_y, right_test_distance);
+               
         }
       }
     }
@@ -198,17 +201,11 @@ void misaligned_midpoint(int left_box_num, int right_box_num, float ref_x, float
 
 }                                                                      
 
-void add_midpoint_to_struct(int box_num, float midpoint_x, float midpoint_y, float depth){
+void add_midpoint_to_struct(struct box *box_array, int box_num, float midpoint_x, float midpoint_y, float depth){
   
-  box_array[box_num].midpoint_x = midpoint_x;
-  box_array[box_num].midpoint_y = midpoint_y;
+  box_array[box_num].mid_point_x = midpoint_x;
+  box_array[box_num].mid_point_y = midpoint_y;
   box_array[box_num].mid_point_depth = depth;   
   
 }
 
-
-
-
-
-
-}
