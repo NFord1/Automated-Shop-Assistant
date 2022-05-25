@@ -1,6 +1,8 @@
 #ifndef CONFIGURATOR_H
 #define CONFIGURATOR_H
 
+#define TOTAL_BOXES 9
+
 
 // Generic struct for the boxes 
 
@@ -28,9 +30,10 @@ struct box{
  
 };
 
-
-
-
+void build_box_array(struct box box_array[TOTAL_BOXES]);
+void set_midpoints_box_array(float home_x, float home_y, struct box* box_array);
+float local_average_depth();
+float azimuth_calc(float anchor_distance, int scale);
 
 
 #endif

@@ -16,7 +16,7 @@
 
 
 
-int user_selection_box_number(box* box_array){
+int user_selection_box_number(struct box* box_array){
 // This function is the main function and returns
 // the identity of the box number that the user is
 // trying to get information from
@@ -33,8 +33,8 @@ int user_selection_box_number(box* box_array){
   
   int box_number;
     
-  hand_convered_boxes(box* box_array);
-  box_number = highest_box_probability(box* box_array);
+  hand_convered_boxes(box_array);
+  box_number = highest_box_probability(box_array);
   
   return box_number;
 
@@ -48,20 +48,20 @@ int user_selection_box_number(box* box_array){
 
 
 
-void hand_convered_boxes(box* box_array){
+void hand_convered_boxes(struct box* box_array){
 // This function identifies which of the boxes have been
 // convered by the users hand   
   
   int i;
-  float distance;
+  unsigned long* distance;
   float hand_trigger = 1200;
   
-  for(i = 0, i < TOTAL_BOXES, i++){
+  for(i = 0; i < TOTAL_BOXES; i++){
    
    // Based on pre-defined mid-point (x,y) move servo to sample the 
    // distance away of the object
    setServoPose(box_array[i].mid_point_x, box_array[i].mid_point_y);
-   GetLatestLaserSample(unsigned long *distance);
+   GetLatestLaserSample(distance);
    
    // If the closest distance is closer than the pre-definied target
    // hand is presentt
@@ -79,7 +79,7 @@ void hand_convered_boxes(box* box_array){
 }
 
 
-int highest_box_probability(box* box_array){
+int highest_box_probability(struct box* box_array){
 // This function takes all of the boxes that are covered
 // and calculates which one is the most likely to be the
 // one selected by the user  
