@@ -26,7 +26,7 @@ Install CodeWarrior IDE using https://canvas.sydney.edu.au/courses/40267/files/2
 
 Download the repository by clicking Code > Download zip.
 
-Navigate to the downloaded repository, open the module you wish to use. If the module contains separate projects for simulation or hardware, select the project you wish to use. Open major_project_drivers.mcp and run the program in the CodeWarrior IDE.
+Navigate to the downloaded repository, open the module you wish to use. If the module contains separate projects for simulation or hardware, select the Information Displa-tion Creation folder. Open major_project_drivers.mcp and run the program in the CodeWarrior IDE.
 
 Magnetometer values desired (as calibration is required) can be accessed at the top of the magnetometer.c file, otherwise program will run and calculate as code continues.
 
