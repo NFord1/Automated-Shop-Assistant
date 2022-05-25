@@ -12,6 +12,7 @@
 - Aaron Sandelowsky
   - Documentation
   - Timing Delays for hand sensing
+  - Original Program flowcharts
 - Alec Cook
   - Magnetometer Calibration
   -  Overall integration
