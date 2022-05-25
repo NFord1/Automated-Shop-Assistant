@@ -26,6 +26,11 @@ This module aims to teach a user how far to place the sensor from the stock and 
 
 The Lidar sensor is then used pointing at an empty shelf to register if the sensor is the correct calibrated distance from the store shelves. If the depth detected is less than expected to terminal will tell the user to move backwards or conversely if the oppoiste is detected to move forwards. This continues until the sensor is within a sensible depth of the shelves when the terminal will notify the user that the sensor is in the right location.
 
+Function 1: align_with_magnetic_field()
+- Read magnetic fields in order to determine central x-position
+- Will rotate the sensor around 180 degrees, until a suitable magnetic reading is achieved
+- Sets value for x_pos, used throuhgout the rest of the program
+
 ### Sensing
 The Sensing module will cycle around all 9 shelves detetcing the depth data present in each direction. If the Depth data is less than the front of the shelf the program will assume that a hand is present and give the user data that can influence a purchase. If the Depth data is between the front and back of the shelf values, the program will assume that the shelves are stocked. If the depth data demonstrates that it is similar to the distance from the back of the shelf from the sensor, the program will announce that the shelves are empty.
 
