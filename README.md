@@ -1,15 +1,24 @@
 # Major Project -G5
 ## Member Contributions:
 - Nathan Ford
-  - Depth Calibration for sensor
+  - Depth calibration for sensor
+  - Conversion of lidar readings to dimensions
 - Samson Mackeller
   - Hand location program
+  - Box construction
+  - Midpoint detection
+  - Depth detections
+  - Greater accuracy calibrations
 - Aaron Sandelowsky
   - Documentation
   - Timing Delays for hand sensing
 - Alec Cook
   - Magnetometer Calibration
   -  Overall integration
+  -  Polling of right column
+  -  Delays
+  -  Halt sensor whilst hand detected
+  -  Video
 - Leon Ortega
   - Work with LED's when hand detected 
 ## Instructions For Use
@@ -18,6 +27,9 @@ Install CodeWarrior IDE using https://canvas.sydney.edu.au/courses/40267/files/2
 Download the repository by clicking Code > Download zip.
 
 Navigate to the downloaded repository, open the module you wish to use. If the module contains separate projects for simulation or hardware, select the project you wish to use. Open major_project_drivers.mcp and run the program in the CodeWarrior IDE.
+
+Magnetometer values desired (as calibration is required) can be accessed at the top of the magnetometer.c file, otherwise program will run and calculate as code continues.
+
 ## Background
 This Program aims to check stock levels on shelves and detect if a shoppper is geesturing towards a product.
 ## Modules
