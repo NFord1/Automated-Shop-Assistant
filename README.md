@@ -5,4 +5,21 @@
 - Aaron Sandelowsky
 - Alec Cook
 - Leon Ortega
-## Instructions
+## Instructions For Use
+Install CodeWarrior IDE using https://canvas.sydney.edu.au/courses/40267/files/22295254/download?download_frd=1
+
+Download the repository by clicking Code > Download zip.
+
+Navigate to the downloaded repository, open the module you wish to use. If the module contains separate projects for simulation or hardware, select the project you wish to use. Open major_project_drivers.mcp and run the program in the CodeWarrior IDE.
+## Background
+This Program aims to check stock levels on shelves and detect if a shoppper is geesturing towards a product.
+## Modules
+### Calibration
+This module aims to teach a user how far to place the sensor from the stock and can rottate the sensor to look directly at the centre column of stock. The magnetometer is used to sense the direction the sensor is pointing to in relation the the earths magnetic field. This will then rotate the servo until the direction the sensor is facing is the correct direction of the stores shelves. This allows for an automated direction calibration for the system.
+
+The Lidar sensor is then used pointing at an empty shelf to register if the sensor is the correct calibrated distance from the store shelves. If the depth detected is less than expected to terminal will tell the user to move backwards or conversely if the oppoiste is detected to move forwards. This continues until the sensor is within a sensible depth of the shelves when the terminal will notify the user that the sensor is in the right location.
+
+### Sensing
+The Sensing module will cycle around all 9 shelves detetcing the depth data present in each direction.
+
+## Future Uses
