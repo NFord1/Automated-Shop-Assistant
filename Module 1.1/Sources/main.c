@@ -307,45 +307,79 @@ void main(void) {
         establish_boxes = 1;
       }
       */
-      
+  }
+  
+}
+  
+void poll_hand_function(struct box* box_array){
+  
+  char buffer[128];
+  unsigned long singleSample;
+  int depth_sum = 0;
+  int depth_avg;
+  int i, j;
+  int checking_for_arm;
+  
+
+
       while (checking_for_arm == 0) {
-      
+          
+          lag();
           setServoPose(box_array[9].mid_point_x, box_array[9].mid_point_y);
           depth_sum = 0;
+          
           for (i = 0; i < 200; i++) {
             GetLatestLaserSample(&singleSample);
             depth_sum = depth_sum + singleSample;
-            sprintf(buffer, "Depth detected run %d: %lu\r\n", i, singleSample);
-            SerialOutputString(buffer, &SCI1);
+            
+            // sprintf(buffer, "Depth detected run %d: %lu\r\n", i, singleSample);
+            // SerialOutputString(buffer, &SCI1); 
           }
+          
           depth_avg = depth_sum / 200;
-          sprintf(buffer, "Depth at height %d: %lu\r\n", j, depth_avg);
-          SerialOutputString(buffer, &SCI1);
-         
+                    
+          if(depth_avg < box_array[9].mid_point_depth - 600){
+          user_selection_box_number(box_array);  
+          }
+          lag();
+          
+          
           setServoPose(box_array[6].mid_point_x, box_array[6].mid_point_y);
           depth_sum = 0;
+          
           for (i = 0; i < 200; i++) {
             GetLatestLaserSample(&singleSample);
-            depth_sum = depth_sum + singleSample;
-            sprintf(buffer, "Depth detected run %d: %lu\r\n", i, singleSample);
-            SerialOutputString(buffer, &SCI1);
+            depth_sum = depth_sum + singleSample;             
           }
+
           depth_avg = depth_sum / 200;
-          sprintf(buffer, "Depth at height %d: %lu\r\n", j, depth_avg);
-          SerialOutputString(buffer, &SCI1);
+
+          if(depth_avg < box_array[6].mid_point_depth - 600){
+          user_selection_box_number(box_array);           
+          }
+          lag();
           
           setServoPose(box_array[3].mid_point_x, box_array[3].mid_point_y);
           depth_sum = 0;
+          
           for (i = 0; i < 200; i++) {
             GetLatestLaserSample(&singleSample);
             depth_sum = depth_sum + singleSample;
-            sprintf(buffer, "Depth detected run %d: %lu\r\n", i, singleSample);
-            SerialOutputString(buffer, &SCI1);
+            
+            
+
           }
+          
           depth_avg = depth_sum / 200;
-          sprintf(buffer, "Depth at height %d: %lu\r\n", j, depth_avg);
-          SerialOutputString(buffer, &SCI1);
-    }
+          
+          
+          if(depth_avg < box_array[3].mid_point_depth - 600){
+          user_selection_box_number(box_array);
+
+
+  } 
+}
+}
    
    // Use a while loop, scan right 3 boxes, take an average of 30 distance values at each, check if an arm is detected
    // Then check all other boxes, take an average of 15 scans
@@ -356,7 +390,7 @@ void main(void) {
     
     
     //_FEED_COP(); /* feeds the dog */
-  } /* loop forever */
+  //} /* loop forever */
   
   /* please make sure that you never leave main */
-}
+//}

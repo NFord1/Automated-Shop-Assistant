@@ -1,3 +1,13 @@
+#include <hidef.h>      
+#include <assert.h>
+#include "derivative.h"      
+#include <stdio.h>
+#include "pll.h"
+#include "simple_serial.h"
+#include "l3g4200d.h"
+#include "servo.h"
+#include "gyro.h"
+
 #include <stdio.h>
 #include "hand_location.h"
 #include "servo.h"
@@ -36,6 +46,8 @@ int user_selection_box_number(struct box* box_array){
   hand_convered_boxes(box_array);
   box_number = highest_box_probability(box_array);
   
+  
+  // print info regarding whats in the box
   return box_number;
 
   
@@ -53,20 +65,20 @@ void hand_convered_boxes(struct box* box_array){
 // convered by the users hand   
   
   int i;
-  unsigned long* distance;
-  float hand_trigger = 1200;
+  float distance;
+  float hand_trigger = 600;
   
   for(i = 0; i < TOTAL_BOXES; i++){
    
    // Based on pre-defined mid-point (x,y) move servo to sample the 
    // distance away of the object
    setServoPose(box_array[i].mid_point_x, box_array[i].mid_point_y);
-   GetLatestLaserSample(distance);
+   local_average_depth();
    
    // If the closest distance is closer than the pre-definied target
    // hand is presentt
    
-   if (distance[i] < hand_trigger){
+   if (distance < box_array[i].mid_point_depth - hand_trigger){
     
     box_array[i].hand_covering = 1;
    } 
@@ -99,7 +111,8 @@ int highest_box_probability(struct box* box_array){
   int k = 0;
   
   int highest_priority[3];
-  int max; 
+  int max;
+  char buffer[128]; 
   
   if (box_array[3].hand_covering == 1) {
    highest_priority[0] = 1;
@@ -151,6 +164,9 @@ for (i = 0; i < 3; i++)
         k = i;
     }
 }
+
+  sprintf(buffer, "Box w/ hand = %d: %lu\r\n", k);
+  SerialOutputString(buffer, &SCI1);
 
 
 return k;
