@@ -22,10 +22,6 @@
 
 
 
-
-
-
-
 int user_selection_box_number(struct box* box_array){
 // This function is the main function and returns
 // the identity of the box number that the user is
@@ -41,22 +37,13 @@ int user_selection_box_number(struct box* box_array){
 //  | 7 | 8 | 9 |
 //  |___|___|___| 
   
-  int box_number;
-    
+  int box_number;   
   hand_convered_boxes(box_array);
   box_number = highest_box_probability(box_array);
-  
-  
+
   // print info regarding whats in the box
   return box_number;
-
-  
 }
-
-
-
-
-
 
 
 
@@ -189,7 +176,7 @@ if (max != 4) {
 
   box_selected = k*3 + max;
 
-   sprintf(buffer, "%d %d %d\r\n", box_array[1].hand_covering, box_array[2].hand_covering, box_array[3].hand_covering	);
+  /*sprintf(buffer, "%d %d %d\r\n", box_array[1].hand_covering, box_array[2].hand_covering, box_array[3].hand_covering	);
   SerialOutputString(buffer, &SCI1);
   
   sprintf(buffer, "%d %d %d\r\n", box_array[4].hand_covering, box_array[5].hand_covering, box_array[6].hand_covering);
@@ -197,9 +184,30 @@ if (max != 4) {
   
   sprintf(buffer, "%d %d %d\r\n", box_array[7].hand_covering, box_array[8].hand_covering, box_array[9].hand_covering);
   SerialOutputString(buffer, &SCI1);
-
-  sprintf(buffer, "Box w/ hand = %d, k = %d, max = %d\r\n", box_selected, k, max);
+  */
+  
+  // BOX NUMBER ANOUNCEMENT
+  sprintf(buffer, "Box #%d Selected!\r\n", box_selected);
   SerialOutputString(buffer, &SCI1);
+  
+  /*
+  // BOX CONTENTS
+  sprintf(buffer, "Box contains %s\r\n", box_array[box_selected].item);
+  SerialOutputString(buffer, &SCI1);
+  // PRICE OF ITEM
+  sprintf(buffer, "Price per item is: $%d\r\n", box_array[box_selected].price);
+  SerialOutputString(buffer, &SCI1);
+  // KJ OF ITEM
+  sprintf(buffer, "One serving is %d kj\r\n", box_array[box_selected].kj_per);
+  SerialOutputString(buffer, &SCI1);
+  // LOCATION OF ORIGIN
+  sprintf(buffer, "Item is from: %s\r\n", box_array[box_selected].location);
+  SerialOutputString(buffer, &SCI1);
+  // ALLERGY INFORMATION
+  sprintf(buffer, "All known allergy information: %s\r\n", box_array[box_selected].allergy);
+  SerialOutputString(buffer, &SCI1);
+  */
+  
   
   while (point_avg < box_array[box_selected].mid_point_depth - 2000) {
     setServoPose(box_array[box_selected].mid_point_x, box_array[box_selected].mid_point_y);
@@ -219,12 +227,6 @@ if (max != 4) {
  SerialOutputString(buffer, &SCI1);
   
 }
- 
-
-
-
-
-
 
 return k;
 

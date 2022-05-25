@@ -25,7 +25,13 @@ struct box{
  float mid_point_x;
  float mid_point_y;
  float mid_point_depth;
- int hand_covering; 
+ int hand_covering;
+ 
+ char item[128];
+ int price;
+ int kj_per;
+ char location[128];
+ char allergy[128];  
  
  
 };

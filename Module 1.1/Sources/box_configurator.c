@@ -27,7 +27,59 @@ void build_box_array(struct box box_array[TOTAL_BOXES]) {
     box_array[i].box_number = i;    
     
   }
-   
+  /*
+  box_array[1]->item = "Apples";
+  box_array[2]->item = "Oat Bar";
+  box_array[3]->item = "Water Bottle";
+  box_array[4]->item = "Frozen Pizza";
+  box_array[5]->item = "Bread Roll";
+  box_array[6]->item = "Cake";
+  box_array[7]->item = "Chocolate";
+  box_array[8]->item = "Mince Beef";
+  box_array[9]->item = "Milk";
+  
+  box_array[1].price = 0.5;
+  box_array[2].price = 1;
+  box_array[3].price = 1;
+  box_array[4].price = 5;
+  box_array[5].price = 2;
+  box_array[6].price = 10;
+  box_array[7].price = 4;
+  box_array[8].price = 12;
+  box_array[9].price = 3.5;
+  
+  box_array[1].kj_per = 200;
+  box_array[2].kj_per = 800;
+  box_array[3].kj_per = 0;
+  box_array[4].kj_per = 4000;
+  box_array[5].kj_per = 1600;
+  box_array[6].kj_per = 10200;
+  box_array[7].kj_per = 3500;
+  box_array[8].kj_per = 6000;
+  box_array[9].kj_per = 2400;
+  
+  box_array[1].location = "Queensland";
+  box_array[2].location = "South Australia";
+  box_array[3].location = "Blue Mountains";
+  box_array[4].location = "Italy";
+  box_array[5].location = "Made Locally";
+  box_array[6].location = "Western Australia";
+  box_array[7].location = "Sydney";
+  box_array[8].location = "Melbourne";
+  box_array[9].location = "Queensland";
+  
+  box_array[1].allergy = "None";
+  box_array[2].allergy = "Nuts, Gluten, Dairy, Egg";
+  box_array[3].allergy = "None";
+  box_array[4].allergy = "Gluten, Dairy, Egg";
+  box_array[5].allergy = "Gluten";
+  box_array[6].allergy = "Gluten, Dairy, Egg";
+  box_array[7].allergy = "Gluten, Dairy, Egg";
+  box_array[8].allergy = "Meat";
+  box_array[9].allergy = "Dairy";
+  
+  */
+    
 }
 
 
