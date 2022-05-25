@@ -31,6 +31,17 @@ Function 1: align_with_magnetic_field()
 - Will rotate the sensor around 180 degrees, until a suitable magnetic reading is achieved
 - Sets value for x_pos, used throuhgout the rest of the program
 
+Function 2: set_midpoints_box_array(x_pos, y_pos, box_array)
+- Will utilise known conversions of servo readings to real measurements to complete calculations
+- Assumes a 15cm difference in both x and y directions of gridpoints
+- Results in slightly smaller alterations moving further from the centre (as greater angle change results in greater distance change)
+- Will assign azimuth and elevation values to box_array[i] struct objects
+
+Function 3: misaligned_midpoint(box_array, home_x, home_y, azimuth789)
+- Will take values from some given cetnre point in positive and negative azimuth plane
+- Results in observing a 'flat' surface, with equal distances left and right, thus an ideal 'centre point' is identified
+- Allows for more robust system
+
 ### Sensing
 The Sensing module will cycle around all 9 shelves detetcing the depth data present in each direction. If the Depth data is less than the front of the shelf the program will assume that a hand is present and give the user data that can influence a purchase. If the Depth data is between the front and back of the shelf values, the program will assume that the shelves are stocked. If the depth data demonstrates that it is similar to the distance from the back of the shelf from the sensor, the program will announce that the shelves are empty.
 
