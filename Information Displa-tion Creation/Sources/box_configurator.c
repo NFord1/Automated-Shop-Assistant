@@ -258,15 +258,7 @@ int misaligned_midpoint(struct box *box_array, int left_box_num, int right_box_n
         }
       }
     }
-  }
-  
-  // ******* FAILED ALLIGNMENT, DO WE WANT TO ADD CONDITION? ********* //
-  //                                                                   //
-  //                                                                   //
-  //                                                                   //
-  //                                                                   //
-  //                                                                   //
-  
+  } 
 
 }                                                                      
 
