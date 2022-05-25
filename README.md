@@ -1,10 +1,17 @@
 # Major Project -G5
 ## Member Contributions:
 - Nathan Ford
+  - Depth Calibration for sensor
 - Samson Mackeller
+  - Hand location program
 - Aaron Sandelowsky
+  - Documentation
+  - Timing Delays for hand sensing
 - Alec Cook
+  - Magnetometer Calibration
+  -  Overall integration
 - Leon Ortega
+  - Work with LED's when hand detected 
 ## Instructions For Use
 Install CodeWarrior IDE using https://canvas.sydney.edu.au/courses/40267/files/22295254/download?download_frd=1
 
