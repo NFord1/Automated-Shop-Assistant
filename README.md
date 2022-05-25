@@ -87,10 +87,15 @@ Throughout the testing of the hand and box detection modules, the use of the ser
       0 0 0         7 8 9
       
       - Would result in box 5 being selected
-      - 
+ 
 - Displaying the final information was useful in ensuring the correct procedures were occuring
 
 ## Discussion Questions
+
+- What happens if all the boxes are covered?
+- What happens if none of the boxes are covered?
+- What happens if a hand is detected, but moves before it is sensed again?
+- What happens if an arm is stuck in diagonally?
 
 ------------------------------------------------------------------------------------------------------------------------------
 
