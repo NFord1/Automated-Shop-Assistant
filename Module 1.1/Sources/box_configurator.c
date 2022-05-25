@@ -122,7 +122,7 @@ float azimuth_calc(float anchor_distance, int scale) {
   double double_theta;
   float one_servo_degree;
 
-  anchor_dist_mm = (double) UNIT_TO_MM * (1/anchor_distance);
+  anchor_dist_mm = (double) anchor_distance * (1/UNIT_TO_MM);
   double_var = (double)(scale) * (150/anchor_dist_mm);
   double_theta = atan(double_var);
   theta = (float) double_theta;
