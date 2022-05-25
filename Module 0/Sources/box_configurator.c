@@ -38,22 +38,7 @@ void build_box_array(struct box box_array[TOTAL_BOXES]) {
 #define WIGGLE_ATTEMPTS 50
 #define WIGGLE_SPATIAL_STEP 5
 
-void set_home_pos() {
-
-float servo_home_x;
-float servo_home_y;
-struct box box_array[TOTAL_BOXES];
-
-// MAGNETOMETER TWIST TO HOME
-
-// READ SERVO READING
-
-set_midpoints_box_array(servo_home_x, servo_home_y, box_array);
-
-}
-
-
-void set_midpoints_box_array(float home_x, float home_y, struct box* box_array) {
+void set_midpoints_box_array(int home_x, int home_y, struct box* box_array) {
   
 
   
