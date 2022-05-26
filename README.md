@@ -32,7 +32,9 @@ Navigate to the downloaded repository, open the module you wish to use. If the m
 Magnetometer values desired (as calibration is required) can be accessed at the top of the magnetometer.c file, otherwise program will run and calculate as code continues.
 
 ## Background
-This Program aims to check stock levels on shelves and detect if a shoppper is geesturing towards a product.
+This Program aims to check stock levels on shelves and detect if a shoppper is geesturing towards a product. Due to the high competition and overcrowding in the market of groceries and other goods, consumers may be deceived by similar looking packaging of various qualities. Also individuals may have visual impairements leading to an inability to distinguish between similar looking packaging. Another concern is covid-19 and flu season where people don't want to touch items that have been infested by other peoples germs. 
+
+Therefore our design aims to be an automated shopping assistant that can allow people to distinguish between products without the need to pick them up. This will increase shoppers safety and scam awareness with our technology aiding shoppers while they are in the supermarket. 
 ## Modules
 ### Calibration
 This module aims to teach a user how far to place the sensor from the stock and can rottate the sensor to look directly at the centre column of stock. The magnetometer is used to sense the direction the sensor is pointing to in relation the the earths magnetic field. This will then rotate the servo until the direction the sensor is facing is the correct direction of the stores shelves. This allows for an automated direction calibration for the system.
